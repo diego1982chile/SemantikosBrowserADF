@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html>
+<f:view xmlns:f="http://java.sun.com/jsf/core" xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <af:document title="concepts.jsf" id="d1">
+        <af:form id="f1">
+            <af:pageTemplate viewId="/oracle/templates/responsiveTemplate.jspx" id="pt1">
+                <f:facet name="header"/>
+                <f:facet name="status"/>
+                <f:facet name="appNav"/>
+                <f:facet name="globalLinks"/>
+                <f:facet name="footer"/>
+                <f:facet name="center">
+                    <af:panelGridLayout id="pgl1">
+                        <af:gridRow marginTop="5px" height="auto" id="gr1">
+                            <af:gridCell marginStart="5px" columnSpan="2" marginEnd="5px" id="gc1" halign="stretch">
+                                <af:panelBox text="PanelBox1" id="pb1" background="medium">
+                                    <f:facet name="toolbar"/>
+                                </af:panelBox>
+                            </af:gridCell>
+                        </af:gridRow>
+                        <af:gridRow marginTop="5px" height="auto" id="gr2">
+                            <af:gridCell marginStart="5px" width="40%" id="gc2" halign="stretch">
+                                <af:panelBox text="PanelBox2" id="pb2">
+                                    <f:facet name="toolbar"/>
+                                </af:panelBox>
+                            </af:gridCell>
+                            <af:gridCell marginStart="5px" width="60%" marginEnd="5px" id="gc3" halign="stretch">
+                                <af:panelBox text="PanelBox3" id="pb3">
+                                    <f:facet name="toolbar"/>
+                                </af:panelBox>
+                            </af:gridCell>
+                        </af:gridRow>
+                        <af:gridRow marginTop="5px" height="auto" marginBottom="5px" id="gr3">
+                            <af:gridCell marginStart="5px" width="40%" id="gc4" halign="stretch">
+                                <af:panelBox text="PanelBox4" id="pb4">
+                                    <f:facet name="toolbar"/>
+                                </af:panelBox>
+                            </af:gridCell>
+                            <af:gridCell marginStart="5px" width="60%" marginEnd="5px" id="gc5" halign="stretch">
+                                <af:panelBox text="PanelBox5" id="pb5" background="light">
+                                    <f:facet name="toolbar"/>
+                                </af:panelBox>
+                            </af:gridCell>
+                        </af:gridRow>
+                    </af:panelGridLayout>
+                </f:facet>
+                <f:facet name="start">
+                    <af:panelGridLayout id="pgl2">
+                        <af:gridRow marginTop="5px" height="auto" id="gr4">
+                            <af:gridCell marginStart="5px" marginEnd="5px" id="gc6" halign="stretch" width="100%">
+                                <af:panelBox text="Buscar" id="pb6">
+                                    <f:facet name="toolbar"/>
+                                    <af:inputText id="it1" value="#{browserBean.browserQuery.query}" autoSubmit="true">                                                                            
+                                        <af:clientListener method="handleEnterEvent" type="keyPress"/>
+                                        <af:serverListener type="EnterEvent" method="#{browserBean.executeQuery()}"/>
+                                        <f:ajax render="pb7"/>
+                                    </af:inputText>
+                                </af:panelBox>
+                            </af:gridCell>
+                        </af:gridRow>
+                        <af:gridRow marginTop="5px" height="auto" marginBottom="5px" id="gr5">
+                            <af:gridCell marginStart="5px" width="100%" marginEnd="5px" id="gc7" halign="stretch">
+                                <af:panelBox text="Resultados" id="pb7">                                    
+                                    <af:listView id="lv1" value="#{browserBean.concepts}" var="concept" partialTriggers="::it1">                                        
+                                          <af:listItem id="listItem1">                                            
+                                            <af:panelGroupLayout id="panelGroupLayout2" layout="horizontal">
+                                                <af:panelGroupLayout id="panelGroupLayout3" layout="vertical" inlineStyle="alignment-adjust: auto;" >
+                                                    <af:outputFormatted id="outputText1" value="#{concept.descriptionFavorite}"/>
+                                                    <af:outputFormatted id="outputText2" value="#{concept.conceptID}"/>
+                                                    <af:outputFormatted id="outputText3" value="#{concept.category.name}"/>                                                            
+                                                </af:panelGroupLayout>                                            
+                                            </af:panelGroupLayout>        
+                                            <!--af:panelGridLayout id="panelGroupLayout2">
+                                              <af:gridRow marginTop="5px" height="auto" marginBottom="5px" id="gr6" layout="vertical" inlineStyle="alignment-adjust: auto;">
+                                                <af:gridCell marginStart="5px" width="34%" id="gc8" layout="vertical" inlineStyle="alignment-adjust: auto;">
+                                                    <af:outputText id="outputText1" value="#{concept.descriptionFavorite}"/>
+                                                    <af:outputText id="outputText2" value="#{concept.conceptID}"/>
+                                                    <af:outputText id="outputText3" value="#{concept.category.name}"/>  
+                                                </af:gridCell>  
+                                              </af:gridRow>
+                                            </af:panelGridLayout-->
+                                       </af:listItem>
+                                    </af:listView>
+                                </af:panelBox>
+                            </af:gridCell>
+                        </af:gridRow>
+                    </af:panelGridLayout>
+                </f:facet>
+                <f:facet name="end"/>
+                <f:attribute name="endWidth" value="0"/>
+                <f:attribute name="startWidth" value="250"/>
+            </af:pageTemplate>
+        </af:form>
+    </af:document>
+    
+    <af:resource type="javascript">
+        function handleEnterEvent(evt) {
+          var _keyCode = evt.getKeyCode();
+          //check for Enter Key
+          if (_keyCode == AdfKeyStroke.ENTER_KEY ) {    
+              var comp = evt.getSource();
+              AdfCustomEvent.queue(comp, "EnterEvent", {fvalue:comp.getSubmittedValue()}, false);
+              evt.cancel();
+          }
+       }
+    </af:resource>
+</f:view>
